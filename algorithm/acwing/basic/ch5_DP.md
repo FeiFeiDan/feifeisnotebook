@@ -128,3 +128,204 @@ int main()
 然后看如何能优化，我们就会注意到对于 `f[i]` 来说，它其实只用到了 `f[i-1]`，其他都没有用到，所以说这里可以用**滚动数组**来做。
 
 而 `f[j]` 不管是 `'j'` 还是 `j - v[i]` ，它都是小于等于 `'j'` 的。
+
+所以，我们可以把 `f[i]` 这个维度删去，然后这样来写这个代码。（滚动数组）
+
+```c++
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1010;
+
+int n, m;
+int v[N], w[N];
+int f[N];
+
+int main()
+{
+    cin >> n >> m;
+    for (int i = 1; i <= n; i ++) cin >> v[i] >> w[i];
+  
+    for (int i = 1; i <= n; i ++)
+        for (int j = m; j >= v[i]; j --)
+            f[j] = max(f[j], f[j - v[i]] + w[i]);
+      
+    cout << f[m];
+  
+    return 0;
+}
+```
+
+## 完全背包问题
+
+### Description
+
+### Solution
+
+动态规划
+
+* 状态表示 `f[i][j]`
+  * 集合：只考虑前去前 `'i'` 个元素，在体积容量不超过 `'j'` 的情况下，所有的选法
+  * 属性 `f[i][j]`：只考虑前去前 `'i'` 个元素，在体积容量不超过 `'j'` 的情况下，所有的选法中，价值的最大值
+* 状态计算（集合划分）
+  * 在 0-1 背包问题时，我们是通过第 i 个物品是选 0 个还是选 1 个分成了两组
+  * 这里，我们可以根据第 i 个物品选多少个分，分成若干组（第 i 个物品选 0 个，第 i 个物品选 1 个，第 i 个物品选 2 个 ……）
+  * 然后看一下每一个子集它的值应该是多少
+  * 第一个子集很好算，相当于是第 i 个物品不选，等价于只考虑前 i-1 个物品
+  * 对于其他的情况，不妨设第 i 个物品选了 k 个
+    * 就相当于选不含 k 个第 i 个物品，然后在体积不超过 `j-k * v[i]` 的情况下，背包能装下价值的最大值，然后再将 `k * w[i]`加回来
+
+```c++
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1010;
+
+int m, n;
+
+int v[N], w[N];
+int f[N][N];
+
+int main()
+{
+    // 这个代码在 N=1000的时候会超时，当 N=1000 的时候，这个代码要执行 10^9 步
+    cin >> m >> n;
+    for (int i = 1; i <= m; i ++) cin >> v[i] >> w[i];
+  
+    for (int i = 1; i <= m; i ++)
+        for (int j = 1; j <= n; j ++)
+        {
+            f[i][j] = f[i-1][j];
+            for (int k = 1; k <= j/v[i]; k ++)
+                f[i][j] = max(f[i][j], f[i-1][j - v[i] * k] + w[i] * k);
+        }
+  
+    cout << f[m][n];
+  
+    return 0;
+}
+```
+
+### 优化方式
+
+假设第 i 个物体的体积是 v，重量是 w，观察这个状态转移方程 $f(i, j)=max(f(i-1,j), f(i-1, j-kv)+kw)$，将其展开
+
+$f(i,j) = max(f(i-1,j), f(i-1, j-v) + w, f(i-1, j-2v)+2w, f(i-1,j-3v)+3w, ...)$，
+
+与 $f(i, j-v)$相比较
+
+$f(i,j-v)\\=max(f(i-1, j-v), f(i-1, j-v-v) + w, f(i-1,j-v-2v) + 2w, f(i-1,j-v-3v) + 3w, ...)\\=max(f(i-1,j-v), f(i-1,j-2v) + w, f(i-1, j-3v)+2w, ...)\\=max(f(i-1,j-v)+w, f(i-1,j-2v)+2w, f(i-1,j-3v)+3w, ...)-w$
+
+$f(i,j) = max(f(i-1,j), f(i,j-v)+w)$
+
+所以，我们的代码就可以优化为
+
+```c++
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1010;
+
+int m, n;
+
+int v[N], w[N];
+int f[N][N];
+
+int main()
+{
+    cin >> m >> n;
+    for (int i = 1; i <= m; i ++) cin >> v[i] >> w[i];
+  
+    for (int i = 1; i <= m; i ++)
+        for (int j = 1; j <= n; j ++)
+        {
+            f[i][j] = f[i-1][j];
+            if (j >= v[i]) f[i][j] = max(f[i][j], f[i][j-v[i]]+w[i]);
+        }
+  
+    cout << f[m][n];
+  
+    return 0;
+}
+```
+
+#### 使用滚动数组优化为 1 维的
+
+```c++
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1010;
+
+int n, m;
+
+int v[N], w[N];
+int f[N];
+
+int main()
+{
+    cin >> n >> m;
+    for (int i = 1; i <= n; i ++) cin >> v[i] >> w[i];
+  
+    for (int i = 1; i <= n; i ++)
+        for (int j = v[i]; j <= m; j ++)
+            f[j] = max(f[j], f[j-v[i]]+w[i]);
+    
+    cout << f[m];
+  
+    return 0;
+}
+```
+
+## 多重背包问题
+
+多重背包问题跟前两个问题的区别是，一个物体不是要么只有 1 件，要么有无穷件，而是有确定的件数 $s_i$ 件
+
+动态规划
+
+* 状态表示
+  * $(i,j)$表示取前 i 个物体，在体积不超过 j 的的情况下的所有取法
+  * $f(i,j)$表示取前 i 个物体，在体积不超过 j 的的情况下所有取法下背包能装下价值的最大值
+* 状态计算
+  * $f(i, j)$可以拆分为，$f(i-1, j)$和 $\text{max}_{k=1}^{s} (f(i-1, j-kv)+kw)$之间的最大值
+
+所以，先写二维的写法（无优化）
+
+```c++
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1010;
+
+int n, m;
+int v[N], w[N], s[N];
+int f[N][N];
+
+int main()
+{
+    cin >> n >> m;
+    for(int i = 1; i <= n; i ++) cin >> v[i] >> w[i] >> s[i];
+  
+    for(int i = 1; i <= n; i ++)
+        for (int j = 1; j <= m; j ++)
+        {
+            f[i][j] = f[i-1][j];
+            for (int k = 1; k <= s[i]; k ++)
+                if(j >= k*v[i]) f[i][j] = max(f[i][j], f[i-1][j-k*v[i]] + k*w[i]);
+        }
+  
+    cout << f[n][m];
+  
+    return 0;
+}
+```
