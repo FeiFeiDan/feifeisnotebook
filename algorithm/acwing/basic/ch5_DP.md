@@ -391,3 +391,45 @@ int main()
     return 0;
 }
 ```
+
+## 分组背包问题
+
+状态表示：$f(i,j)$：从第 i 组物品中选，在总体积不超过 j 的情况下，背包可以容纳价值的最大值。
+
+状态计算：0-1背包问题是选或不选，完全背包问题是选几个，分组分组背包问题就是选不选这组中的物体，选哪个。
+
+$f(i,j)=\text{max} (f(i-1, j), f(i-1,j-v_1)+w_1,f(i-1, j-v_2)+w_2,...)$
+
+（一维写法的优化总结，如果状态计算中要用到上一层的话，就从大到小循环。如果用到这一层的话，就从小到大循环）
+
+```c++
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 110;
+
+int v[N][N], w[N][N], s[N];
+int f[N];
+
+int main()
+{
+    int n, m;
+    cin >> n >> m;
+    for (int i = 1; i <= n; i ++)
+    {
+        cin >> s[i];
+        for (int j = 1; j <= s[i]; j ++) cin >> v[i][j] >> w[i][j];
+    }
+  
+    for (int i = 1; i <= n; i ++)
+        for (int j = m; j >= 1; j--)
+            for (int k = 1; k <= s[i]; k++)
+                if (j >= v[i][k]) f[j] = max(f[j], f[j-v[i][k]]+w[i][k]);
+  
+    cout << f[m];
+  
+    return 0;
+}
+```
