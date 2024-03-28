@@ -329,3 +329,67 @@ int main()
     return 0;
 }
 ```
+
+### 优化方法（二进制优化）
+
+首先写出状态转移方程
+
+$$
+\begin{align} &f(i,j)\\&=max(f(i-1, j), f(i-1, j-v)+w, f(i-1, j-2v)+2w, f(i-1, j-3v)+3w, ..., f(i-1, j-sv)+sw\ \ \ \ \ \ \ \ \ \,)\\&f(i, j-v)\\&=max(\qquad\qquad\,,f(i-1,j-v),\quad\ \ \ \ \,f(i-1,j-2v)+w,\ \ f(i-1, j-3v)+2w,...,f(i-1,j-sv)+(s-1)w，f(i-1,j-(s+1)v)+sw)\end{align}
+$$
+
+这里不方便的是，观察$f(i,j-v)$的$\text{max}$中多出了一项$f(i-1,j-(s+1)v)+sw$，而 max 是不能做减法的，也就是说，假如说我知道 $s_1$到$s_i$的最大值，就算我们知道 $s_i$的值，也没有办法知道$s_1$到$s_{i-1}$的最大值
+
+但是我们可以用一种二进制的优化方式，我们可以通过二进制，把第 i 个物品的所有 s 个取法做一个拆分
+
+假设$2^{k} \leq s < 2^{k+1}$，我们就可以把第 i 个物品的 s 种取法想象成$i,2i,2^2i,2^3i,...,2^ki$种选法的组合。（二进制优化）
+
+然后，就能把多重背包问题转换成 0-1背包问题了
+
+```c++
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 11010, M = 2010;
+int v[N], w[N]; // 不需要写 s[N] 因为会将其不同的取法转换成一件不同的物品
+int f[M];
+
+int main()
+{
+    int n, m;
+    cin >> n >> m;
+  
+    int cnt = 0;
+    for (int i = 1; i <= n; i ++)
+    {
+        int a, b, s;
+        cin >> a >> b >> s;
+        int k = 1; // 存放幂次
+        while (k <= s)
+        {
+            cnt ++;
+            v[cnt] = a * k;
+            w[cnt] = b * k;
+            s -= k;
+            k *= 2;
+        }
+        if (s > 0)
+        {
+            cnt ++;
+            v[cnt] = a*s;
+            w[cnt] = b*s;
+        }
+    }
+    for (int i = 1; i <= cnt; i ++)
+        for (int j = m; j >= v[i]; j --)
+            f[j] = max(f[j], f[j - v[i]] + w[i]);
+        
+    cout << f[m];
+  
+    return 0;
+}
+```
+
+以 200 为例，200可以拆解成 1，2，4，8，16，32，64，73。所以说 $[0, 200-73]$ 内所有的数都能被 $\{ 1,2,4,8,16,32,64 \}$ 表示出来。而如果想表示$(200-73,200]$内的数的话，只需要让能表示的数加上一个 73就可以了。
