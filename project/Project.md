@@ -2,7 +2,7 @@
 
 ## TCL
 
-## Image
+## Linux Image
 
 ## Flesh FPGA
 
@@ -17,3 +17,5 @@ The definition of device tree is clearly provided by Wikipedia.
 Device tree is mandatory for ARM devices as a remedy for vast number of forks by move the significant part of hardware description out of the kernal binary. The hardware description move into the compiled device tree blob, which is handed to the kernal by boot loader.
 
 ## GUI on Jupyter Notebook
+
+`ipywidgets` is a good library that ...
