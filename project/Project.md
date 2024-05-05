@@ -70,11 +70,18 @@ The functions above was placed in the different module.
     </ul>
     <li style="text-align:justify; text-justify:inter-ideograph"><b>QuartusProjectGenerator.py: </b>this module ...</li>
     <ul>
-        <li style="text-align:justify; text-justify:inter-ideograph"><b>...: </b>...</li>
-        <li style="text-align:justify; text-justify:inter-ideograph"><b>...: </b>...</li>
-        <li style="text-align:justify; text-justify:inter-ideograph"><b>...: </b>...</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>Connection: </b>This class abstracts port-PIO connecitons, recording which port is connected to which PIO and identifying the start bit of the connection.</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>Quartus: </b>This class records the paths of Quartus' executable file.</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>FolderStructureBuilder: </b>This class will construct the folder for the quartus project. It will create quartus project and ip folder and write hdl and hw.tcl files into it.</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>QuartusTCLScriptGenerator: </b>...</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>QsysTCLScriptGenerator: </b>...</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>TopLevelHdlGenerator: </b>...</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>BatchFileGenerator: </b>...</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>XMLDocumentation: </b>...</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>QuartusProjectManager: </b>...</li>
     </ul>
 </ul>
+
 
 Details of classes:
 
@@ -97,7 +104,7 @@ Details of classes:
     </tr>
     <tr>
     	<td>direction: str</td>
-        <td>An input port or an output port. The values are restricted to 'in' and 'out'.</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">An input port or an output port. The values are restricted to 'in' and 'out'.</td>
     </tr>
     <tr>
     	<td>type: str</td>
@@ -118,7 +125,7 @@ Details of classes:
     </tr>
     <tr>
     	<td>__type_parser(value:str) -> bool</td>
-        <td>Get width of the port with regular expression from the type. This function will be called by Setter of type. It will return false if the parsing is fail.</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">Get width of the port with regular expression from the type. This function will be called by Setter of type. It will return false if the parsing is fail.</td>
     </tr>
 </table>
 
@@ -139,7 +146,7 @@ Details of classes:
     </tr>
     <tr>
     	<td>direction: str</td>
-        <td>An input PIO or an output PIO. The values are restricted to 'in' and 'out'.</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">An input PIO or an output PIO. The values are restricted to 'in' and 'out'.</td>
     </tr>
     <tr>
     	<td>address: int</td>
@@ -147,12 +154,12 @@ Details of classes:
     </tr>
     <tr>
     	<td>available_bit: int</td>
-		<td>The highest available bit of this PIO. When a port is connected to a PIO, it will connect from higher bit to lower bit. This variable is initialed with 63.</td>
+		<td style="text-align:justify; text-justify:inter-ideograph">The highest available bit of this PIO. When a port is connected to a PIO, it will connect from higher bit to lower bit. This variable is initialed with 63.</td>
     </tr>
     <tr>
         <td rowspan="5"><b>Member method</b></td>
         <td>init()</td>
-        <td>Initial the member variable by calling Getter/Setter method.</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">Initial the member variable by calling Getter/Setter method.</td>
     </tr>
     <tr>
         <td>Getter/Setter</td>
@@ -160,15 +167,15 @@ Details of classes:
     </tr>
     <tr>
     	<td>connect_port(port: Port) -> int</td>
-        <td>This function will receive an instance of Port. After the port was connected on PIO, this function will return the start bit of connect.</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">This function will receive an instance of Port. After the port was connected on PIO, this function will return the start bit of connect.</td>
     </tr>
     <tr>
     	<td>has_spare_space_for(self, port_width: int) -> bool</td>
-        <td>This function is to judge whether this PIO has enough bits to connect with the port.</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">This function is to judge whether this PIO has enough bits to connect with the port.</td>
     </tr>
     <tr>
     	<td>_connect_to_available_bits(self, port: Port) -> int</td>
-        <td>This function will be called by connect_port(). It will modity the available_bit after the connection and return the start bit of connect.</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">This function will be called by connect_port(). It will modity the available_bit after the connection and return the start bit of connect.</td>
     </tr>
 </table>
 
@@ -185,21 +192,22 @@ Details of classes:
     <tr>
         <td><b>Member variable</b></td>
         <td>pios: List[PIO]</td>
-        <td>This list contains PIOs which were already created. After a PIO has been created, the PIO will be appended in this list.</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">This list contains PIOs which were already created. After a PIO has been created, the PIO will be appended in this list.</td>
     </tr>
         <td rowspan="4"><b>Member method</b></td>
         <td>_direction_convert(mode: str) -> str</td>
-        <td>This function will receive a string 'in' or 'out', and upon receiving one of them, it will return another. Because the direction of user's design is opposite with PIO's direciton.</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">This function will receive a string 'in' or 'out', and upon receiving one of them, it will return another. Because the direction of user's design is opposite with PIO's direciton.</td>
     </tr>
     <tr>
         <td>_find_or_create_pio_for_port(self, port: Port) -> PIO</td>
-        <td>This function will return an instance of a PIO. This function first will check out the last PIO in the list pios for whether it has enought bits to connect with the port. If it is true, it will return that PIO. If not, it will create a new instance of PIO and appends it in the List pios.</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">This function will return an instance of a PIO. This function first will check out the last PIO in the list pios for whether it has enought bits to connect with the port. If it is true, it will return that PIO. If not, it will create a new instance of PIO and appends it in the List pios.</td>
     </tr>
     <tr>
     	<td>connect_port(self, port: Port) -> Tuple[PIO, int]</td>
-        <td>This function will receive an instance of Port, It will connect it with a PIO. First it will get an instance of PIO by calling the function _find_or_create_pio_for_port(). Then it will call the member function of pio, connect_port(), to connect the port and the pio.</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">This function will receive an instance of Port, It will connect it with a PIO. First it will get an instance of PIO by calling the function _find_or_create_pio_for_port(). Then it will call the member function of pio, connect_port(), to connect the port and the pio.</td>
     </tr>
 </table>
+
 
 <center>Classes in HDLGenProjectParser.py</center>
 
@@ -225,7 +233,7 @@ Details of classes:
     </tr>
     <tr>
         <td>Getter/Setter</td>
-        <td>Get/set method for the path. First, it will convert it to an absolute path. Then it will convert as a string in posix path format.</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">Get/set method for the path. First, it will convert it to an absolute path. Then it will convert as a string in posix path format.</td>
     </tr>
 </table>
 
@@ -242,28 +250,75 @@ Details of classes:
     <tr>
         <td><b>Member variable</b></td>
         <td>path: str</td>
-        <td>A string to store the path of the user's HDLGen project which is an xml file.</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">A string to store the path of the user's HDLGen project which is an xml file.</td>
     </tr>
     <tr>
         <td rowspan="8"><b>Member method</b></td>
+        <td>init()</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">Initial the member variable by calling Getter/Setter method.</td>
+    </tr>
+    <tr>
+        <td>Getter/Setter</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">Get/set method for the member variable.</td>
+    </tr>
+    <tr>
+        <td>parser(self) -> Tuple[str, str, str, List[Port], str]</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">This function aims retrieve series necessery information from the HDLGen project. It will return a couple of values: project_name, top_hdl_path, environment_path, ports, testbench. This function will call the following member functions to get those return values.</td>
+    </tr>
+    <tr>
+    	<td>_design_name_parser(root: Element) -> str</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">The function retrieves the design name of users design.</td>
+    </tr>
+    <tr>
+    	<td>_top_level_hdl_parser(root: Element) -> str</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">
+            The function retrieves the path of HDL file of user's design.<br>
+            This function will first retrieve the location of user's HDLGen project. Then retrieve the subfolder of the HDL files.<br>
+        </td>
+    </tr>
+    <tr>
+    	<td>_environment_path_parser(root: Element) -> str</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">
+        	Get the environment path. This function will assume that the environment path is an absolute path.
+        </td>
+    </tr>
+    <tr>
+    	<td>_signals_parser(root: Element) -> List[Port]</td>
+    	<td style="text-align:justify; text-justify:inter-ideograph">This function will retrieve the signals, then create an instance of port, and return the instance.</td>
+    </tr>
+    <tr>
+    	<td>_testbench_parser(root: Element) -> str</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">This function will retrieve a testbench and return it as a string.</td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td><b>Class name</b></td>
+        <td><b>HDLGenEnvironmentParser</b></td>
+    </tr>
+    <tr>
+    	<td></td>
+        <td></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td><b>Member variable</b></td>
+        <td>path: str</td>
+        <td>A string to store the environment path.</td>
+    </tr>
+    <tr>
+        <td rowspan="3"><b>Member method</b></td>
         <td>init()</td>
         <td>Initial the member variable by calling Getter/Setter method.</td>
     </tr>
     <tr>
         <td>Getter/Setter</td>
-        <td>Get/set method for the member variable.</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">Get/set method for the path. First, it will convert it to an absolute path. Then it will convert as a string in posix path format.</td>
     </tr>
     <tr>
-        <td>parser(self) -> Tuple[str, str, str, List[Port], str]</td>
-        <td>This function aims retrieve series necessery information from the HDLGen project. It will return a couple of values: project_name, top_hdl_path, environment_path, ports, testbench. This function will call the following member functions to get those return values.</td>
-    </tr>
-    <tr>
-    	<td>_design_name_parser(root: Element) -> str</td>
-        <td>The function retrieves the design name of users design.</td>
-    </tr>
-    <tr>
-    	<td>_top_level_hdl_parser(root: Element) -> str</td>
-        <td>The function retrieves the path of HDL file of user's design. This function will </td>
+        <td>parser(self) -> List[str]</td>
+        <td style="text-align:justify; text-justify:inter-ideograph">Get/set method for the path. First, it will convert it to an absolute path. Then it will convert as a string in posix path format.</td>
     </tr>
 </table>
 
