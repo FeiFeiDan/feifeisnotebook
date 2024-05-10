@@ -1,6 +1,8 @@
 
 
-# Title
+<h1 style="text-align: center">Exploring a Prototype Process for Automating SoC Application Development on the DE10 Nano.</h1>
+
+
 
 
 
@@ -20,6 +22,10 @@
 
 
 
+
+
+
+
 <center>Student Name: Chenyang Liu</center>
 
 <center>Student ID: 23105110</center>
@@ -29,6 +35,10 @@
 <center>Supervisor: Fearghal Morgan</center>
 
 <div style="page-break-before: always;"></div>
+
+## Abstract
+
+<p style="text-align:justify; text-justify:inter-ideograph">This thesis explores a method for developing SoC applications on the DE10 Nano. It involves modifying the GHRD to obtain a project template and automating the parsing of the HDLGen ChatGPT project through Python to generate TCL scripts. These scripts are then verified on the DE10 Nano. This automated process alleviates developers from the burden of tedious procedures.</p>
 
 ## Contents
 
@@ -47,15 +57,11 @@
 
 <p style="text-align:justify; text-justify:inter-ideograph">This project aims to refine the workflow for digital circuit design, verification, and execution on a development board using HDLGen_ChatGPT. It involves designing Data Flow Diagrams (DFDs) and Finite State Machines (FSMs) within the HDLGen_ChatGPT platform, as well as drafting pseudocode. Based on these DFDs, FSMs, and pseudocode, prompts are generated for submission to a large language model that subsequently produces High-Level Description Language (HDL) code. The process is furthered by executing pre-written TCL scripts to initiate both AMD and Intel's Electronic Design Automation (EDA) tools (Vivado and Quartus), which generate necessary C language files and Linux Drivers for a System-on-Chip (SoC) application running on the DE10-Nano board. Finally, through a user interface written in either C or Python, the performance of the SoC can be monitored on the DE10-Nano board.</p>
 
-<center>Figure 1, Workflow Overview</center>
-
-<p style="text-align:justify; text-justify:inter-ideograph">This project is merely a part of a more comprehensive project, as illustrated in Figure 1, which encompasses the development of GUIs, front-end drawing functionalities, as well as the adaptation of AMD EDA tools and the PYNQ platform for AMD development boards. However, within the scope of this particular project, it solely focuses on the adaptation of Intel EDA tools and the corresponding Development Kit. The DE10-Nano from Intel has been selected as the Development Kit for this endeavor. The choice of DE10-Nano is due to its widespread popularity and ample references in the educational market, where it serves as an effective teaching tool. Notably, the DE10-Nano consists of two parts: a traditional FPGA and an HPS (Hard Processor System) that incorporates dual Cortex-A9 cores. This means the DE10-Nano can run Linux, thereby allowing it to align with the PYNQ aspect of the broader project as illustrated in Figure 1. Furthermore, the presence of Linux facilitates the verification process for the FPGA. (Intel Corporation, n.d.)</p>
+<p style="text-align:justify; text-justify:inter-ideograph">This project is merely a part of a more comprehensive project which encompasses the development of GUIs, front-end drawing functionalities, as well as the adaptation of AMD EDA tools and the PYNQ platform for AMD development boards. However, within the scope of this particular project, it solely focuses on the adaptation of Intel EDA tools and the corresponding Development Kit. The DE10-Nano from Intel has been selected as the Development Kit for this endeavor. The choice of DE10-Nano is due to its widespread popularity and ample references in the educational market, where it serves as an effective teaching tool. Notably, the DE10-Nano consists of two parts: a traditional FPGA and an HPS (Hard Processor System) that incorporates dual Cortex-A9 cores. This means the DE10-Nano can run Linux, thereby allowing it to align with the PYNQ aspect of the broader project as illustrated in Figure 1. Furthermore, the presence of Linux facilitates the verification process for the FPGA. (Intel Corporation, n.d.)</p>
 
 <p style="text-align:justify; text-justify:inter-ideograph">In the AMD segment of the boarder entire project, PYNQ has been chosen as part of the development kit. It aims to simplify the development process for ZYNQ's All Programmable System-on-Chip (SoC) and enables developers to program and control FPGA hardware directly using Python language. PYNQ combines traditional hardware description languages (such as VHDL or Verilog) design workflows with the high-level programming language Python, making it easier for software engineers, data scientists, and non-traditional FPGA designers to leverage the powerful parallel processing capabilities and real-time performance of FPGAs.</p>
 
-...
-
-<p style="text-align:justify; text-justify:inter-ideograph">This report presents an automated workflow for FPGA development tailored to the DE10 Nano platform. The proposed methodology involves a Python script that parses the HDLGen_ChatGPT project, subsequently generating a Quartus project which can compile into a bitstream file. Furthermore, it facilitates the transmission and reception of data to and from the FPGA on the DE10 Nano via Python or Jupyter Notebook, thereby streamlining the development and interaction process.</p>
+<p style="text-align:justify; text-justify:inter-ideograph">PYNQ offers an interface that allows users to easily monitor the status of the entire PYNQ development board and send data from the ARM processor on PYNQ to the FPGA via Python. Although the DE10 Nano is similar to PYNQ, featuring both an ARM processor and an FPGA, it does not provide a user-friendly method for data exchange from the ARM processor to the FPGA. This report presents an automated workflow for FPGA development tailored to the DE10 Nano platform. The proposed methodology involves a Python script that parses the HDLGen_ChatGPT project, subsequently generating a Quartus project which can compile into a bitstream file. Furthermore, it facilitates the transmission and reception of data to and from the FPGA on the DE10 Nano via Python or Jupyter Notebook, thereby streamlining the development and interaction process.</p>
 
 <p style="text-align:justify; text-justify:inter-ideograph">In brief, the way to develop this automatic development process can be encapsulated as follows:</p>
 
@@ -75,8 +81,6 @@
 <p style="text-align:justify; text-justify:inter-ideograph">After compile the project and obtain the bit stream file. The Linux running on DE10 Nano allows user to control DE10 Nano and send files into it by ssh. Following the transmission of the bit stream file into the DE10 Nano, a sequence of procedures is necessitated to configure this bit stream file onto the FPGA. The procedures can be integrated into a shell script.</p>
 
 <p style="text-align:justify; text-justify:inter-ideograph">The primary objective of employing Linux on DE10 Nano is to facilitate efficient data transfer to FPGA and get the output data therefrom. The methodology employed for data exchange between FPGA and Linux is reading from and writing to the <code>/dev/mem</code> file interfaced with the FPGA. This report introduces how to use Python to achieve this.</p>
-
-...
 
 ## Chapter 1, Environment Preparation
 
@@ -104,21 +108,46 @@
 
 ### 1.2 Linux Image Creation
 
+<p style="text-align:justify; text-justify:inter-ideograph">Creating a Linux image can be a complex process. This tutorial (<a herf="https://github.com/zangman/de10-nano/blob/master/docs/Building-Embedded-Linux.md">Zangman, Building Embadded Linux</a>) serves as an excellent reference, and rather than repeating its content here, this document will provide additional explanations and clarifications.</p>
+
+<p style="text-align:justify; text-justify:inter-ideograph">You must create your own Linux image. Once created, the size of the image cannot be modified. To install software such as Python and Jupyter Notebook, it is necessary to create an image with a capacity greater than 10GB.</p>
+
+#### 1.2.1 U-Boot
+
+<p style="text-align:justify; text-justify:inter-ideograph">When configuring U-Boot for the DE10 Nano, it is necessary to assign a MAC address, but it is not essential to flash the FPGA during U-Boot startup. In the future, the DE10 Nano will operate in the cloud, allowing users to access the DE10 Nano over the network and flash the FPGA during system runtime. Therefore, this step can be omitted when setting up U-Boot.</p>
+
+#### 1.2.2 Compile The Kernel
+
+<p style="text-align:justify; text-justify:inter-ideograph">When configuring the kernel, a crucial step is to enable configfs. Configfs is an in-memory virtual file system, which, as discussed in section 2.2.1, allows for the configuration of the FPGA during system runtime.</p>
+
+#### 1.2.3 Device Tree
+
 The definition of device tree is clearly provided by Wikipedia.
 
-> Devicetree is a datastructure describing the hardware components of a particular computer so that operating system's kernal can use and manage those components, including the CPU or CPUs, the memory, the buses and the integrated peripherals.
+<blockquote>
+    <p style="text-align:justify; text-justify:inter-ideograph">Devicetree is a datastructure describing the hardware components of a particular computer so that operating system's kernal can use and manage those components, including the CPU or CPUs, the memory, the buses and the integrated peripherals.</p>
+    <p style="text-align:justify; text-justify:inter-ideograph">Given a currect device tree, the same compiled kernal can support different hardware configuration within a wider architecture family.</p>
+</blockquote>
 
-> Given a currect device tree, the same compiled kernal can support different hardware configuration within a wider architecture family.
+<p style="text-align:justify; text-justify:inter-ideograph">Device tree is mandatory for ARM devices as a remedy for vast number of forks by move the significant part of hardware description out of the kernal binary. The hardware description move into the compiled device tree blob, which is handed to the kernal by boot loader.</p>
 
-Device tree is mandatory for ARM devices as a remedy for vast number of forks by move the significant part of hardware description out of the kernal binary. The hardware description move into the compiled device tree blob, which is handed to the kernal by boot loader.
+<p style="text-align:justify; text-justify:inter-ideograph">In section 2.2.1, we load the bitstream file into the FPGA during system runtime by configuring the Device Tree Overlay.</p>
 
 ### 1.3 EDA Tools
 
+<p style="text-align:justify; text-justify:inter-ideograph">The Electronic Design Automation (EDA) tool employed in this project is Quartus Prime Lite. There are numerous tutorials available online on how to utilize this EDA tool; however, several important points require attention:</p>
+
+<p style="text-align:justify; text-justify:inter-ideograph">1. Users operating on Windows systems must install Windows Subsystem for Linux (WSL) 1 and avoid upgrading to WSL 2, as NIOS II is incompatible with WSL 2. Failure to adhere to this could result in errors as illustrated below. (<a herf="https://www.intel.com/content/www/us/en/docs/programmable/683525/21-3/installing-windows-subsystem-for-linux.html">Nios II Software Developer Handbook</a>)</p>
+
+![nios_ii_error](./pics/nios_ii_error.jpeg)
+
+<center>Figure 5, NIOS II Error</center>
+
+<p style="text-align:justify; text-justify:inter-ideograph">2. During the development of this project, Quartus Prime Lite version 22 was used. Post-project, Intel released version 23, which has been tested and found to contain TCL commands that differ from those in version 22. To ensure compatibility with this project's code, it is advised to use Quartus Prime Lite version 22.</p>
+
 ### 1.4 System Barebone Creation
 
-<p style="text-align:justify; text-justify:inter-ideograph">Open-source communities supply a commendable guide on acquiring project  templates (<a herf="https://github.com/zangman/de10-nano/blob/master/docs/Simple-Hardware-Adder_-Initial-Project-Setup.md">Zangman, Initial Project Setup</a>). This report refrains from duplicating those steps but  explains the rationale behind undertaking such actions.</p>
-
-...
+<p style="text-align:justify; text-justify:inter-ideograph">Open-source communities supply a commendable guide on acquiring project  templates (<a herf="https://github.com/zangman/de10-nano/blob/master/docs/Simple-Hardware-Adder_-Initial-Project-Setup.md">Zangman, Initial Project Setup</a>). This report refrains from duplicating those steps.</p>
 
 ``````verilog
 //=======================================================
@@ -233,11 +262,24 @@ assign LED[0] = led_level;
 endmodule
 ``````
 
+<center>Code of the Top Module</center>
 
+![qsys_template](./pics/qsys_template.png)
+
+<center>Figure 6, Platform Designer of GHRD after Trim</center>
 
 ## Chapter 2, Work Process
 
 ### 2.1 Quartus Project
+
+<p style="text-align:justify; text-justify:inter-ideograph">Users can combine their projects with a template in a few simple steps to run their designs on the DE10 Nano. Initially, users must add their HDL files to the template project. Subsequently, PIOs should be added in the platform designer according to their design. It is important to note that the direction of PIOs in the platform designer is opposite to the direction of the Ports in the user's design. This is because the direction of Ports is relative to the user's digital circuit, whereas the direction of PIOs is relative to the HPS.</p>
+
+![Qsys_fifo](./pics/Qsys_fifo.png)
+
+<center>Figure 7, Platform Designer System for FIFO</center>
+
+
+<p style="text-align:justify; text-justify:inter-ideograph">Next, generate HDL code within the Platform Designer. Subsequently, instantiate the user's HDL and connect the user-created component with the component generated by the Platform Designer in the top module. The following code illustrates this connection process.</p>
 
 ``````verilog
 // ...
@@ -266,6 +308,106 @@ soc_system u0(
 
 #### 2.2.1 Configure the Bitstream File
 
+<p style="text-align:justify; text-justify:inter-ideograph">The subsequential step of getting the bitstream file is configuring the FPGA.</p>
+
+<p style="text-align:justify; text-justify:inter-ideograph">This project employs a dynamic method of managing device tree overlays, which allows users to configure FPGA dynamically during the runtime of a Linux system. A device tree overlay is a mechanism that enables the addition, modification, or deletion of nodes and properties in a device tree without altering the original device tree blob (DTB). This facilitates the configuration or expansion of hardware during runtime. The management of these dynamic device tree overlays is achieved through configfs. Configfs is an in-memory virtual file system used to configure kernel components dynamically while the system is operational, and it similarly facilitates the runtime configuration of device tree overlays. It is important to note that configurations made via configfs are not retained after a system reboot, due to its reliance on an in-memory file system.</p>
+
+<p style="text-align:justify; text-justify:inter-ideograph">The following code defines a device tree overlay, which constitutes a segment of a device tree that can be integrated into other device trees as an extension. In the U-Boot file <code>socfpga.dtsi</code>, there is a node named <code>/soc/base_fpga_region</code>; this node serves as the target path for the insertion of the fragment into the device tree. This device tree file specifies the location of the bitstream file, and upon loading the device tree overlay, the Linux kernel automatically loads the configuration RBF file for the FPGA, as directed by the instructions within the device tree.</p>
+
+```java
+/*
+ * Device Tree Source (DTS) syntax version declaration.
+ */
+/dts-v1/;
+
+/*
+ * Designates this as a plugin section for compatibility with certain parsers.
+ */
+/plugin/;
+
+/*
+ * Root node of the device tree description.
+ */
+/ {
+    /*
+     * Fragment definition with an index of 0, used to overlay properties
+     * onto a specific target in the device tree.
+     */
+    fragment@0 {
+        /* 
+         * Specifies the path where this overlay should be applied within the device tree.
+         * In this case, it targets the FPGA base region under the SoC node.
+         */
+        target-path = "/soc/base_fpga_region";
+
+        /* 
+         * The __overlay__ section contains properties to be added or modified at
+         * the target path.
+         */
+        __overlay__ {
+            /* 
+             * Defines the number of cells used to represent addresses in this node.
+             * Here, it's set to <1>, indicating 32-bit addressing.
+             */
+            #address-cells = <1>;
+
+            /* 
+             * Defines the number of cells used to represent sizes in this node.
+             * Similarly, it's set to <1>, indicating 32-bit size representation.
+             */
+            #size-cells = <1>;
+
+            /* 
+             * Assigns a name to the firmware image associated with this overlay.
+             * The firmware named "fifo.rbf" will be loaded at the specified address.
+             */
+            firmware-name = "fifo.rbf";
+        };
+    };
+};
+```
+
+<p style="text-align:justify; text-justify:inter-ideograph">Following the compilation of the device tree overlay file, a DTBO file is generated.</p>
+
+``` shell
+dtc -O dtb -o fifo.dtbo -b 0 -@ fifo.dtso
+```
+
+<p style="text-align:justify; text-justify:inter-ideograph">A directory, <code>/lib/firmware</code>, is created to store the DTBO and RBF files.</p>
+
+```shell
+mkdir -p /lib/fireware
+cp fifo.dtbo /lib/firmware
+cp fifo.rbf /lib/firmware
+```
+
+<p style="text-align:justify; text-justify:inter-ideograph">Additionally, a <code>/config</code> directory is established, and the configfs filesystem is mounted to this directory.</p>
+
+``` shell
+mkdir -p /config
+mount -t configfs configfs /config
+```
+
+<p style="text-align:justify; text-justify:inter-ideograph">Subsequently, one must navigate to the device tree overlay directory under <code>/config</code>, create a directory named <code>fifo</code>, and write the <code>fifo.dtbo</code> file to <code>fifo/path</code>.</p>
+
+``` shell
+cd /config/device-tree/overlays
+mkdir fifo
+echo -n "fifo.dtbo" > fifo/path
+```
+
+<p style="text-align:justify; text-justify:inter-ideograph">Upon completion, the Linux kernel automatically loads the RBF file into the FPGA. This process can be verified by examining the contents of the <code>fifo/state</code> file.</p>
+
+``` shell
+cat fifo/status
+```
+
+<p style="text-align:justify; text-justify:inter-ideograph">To update the FPGA, the <code>fifo</code> directory should be deleted and the aforementioned steps repeated.</p>
+
+``` shell
+rm fifo
+```
+
 #### 2.2.2 Access Physical Memory
 
 <p style="text-align:justify; text-justify:inter-ideograph"><code>/dev/mem</code> provides access to the system's physical memory.</p>
@@ -276,6 +418,7 @@ soc_system u0(
     </p>
     <cite><a herf="https://man7.org/linux/man-pages/man4/mem.4.html">—— Linux man page</a></cite>
 </blockquote>
+
 <p style="text-align:justify; text-justify:inter-ideograph">A segment of Python code below illustrates the principle behind data interchange between the FPGA and HPS. This code section accomplishes data exchange by directly accessing the <code>/dev/mem</code> file to read and write memory, facilitating communication with the FPGA.</p>
 
 <p style="text-align:justify; text-justify:inter-ideograph">
@@ -314,11 +457,9 @@ with open('/dev/mem', 'r+b', buffering=0) as f:
     mem_mapped.close()
 ```
 
-
-
 ## Chapter 3, Program Design
 
-<p style="text-align:justify; text-justify:inter-ideograph">This document provides a Python script that automatically generates a Quartus project. The script compiles the project into a programmable file, which is then used to reflash the FPGA on the DE10-Nano. Additionally, it enables communication between the FPGA and the Linux running on the DE10-Nano's HPS.</p>
+<p style="text-align:justify; text-justify:inter-ideograph">This thesis provides a Python script that automatically generates a Quartus project. The script compiles the project into a programmable file, which is then used to reflash the FPGA on the DE10-Nano. Additionally, it enables communication between the FPGA and the Linux running on the DE10-Nano's HPS.</p>
 
 <p style="text-align:justify; text-justify:inter-ideograph">The program is a sophisticated state machine, necessitating the development of exhaustive documentation detailing its operations. Of particular note in Windows, the default file path separator is the backslash (\). When such paths are directly imparted to Quartus, they are misconstrued as escape characters, leading to errors. To avoid this issue within Python, the advisable practice is to employ the pathlib module for path manipulations, ensuring paths adhere to the POSIX format. Additionally, in legacy HDLGen projects, relative paths may be utilized, mandating the implementation of suitable mechanisms within the program to handle these cases appropriately. If you want to get the code, please go to the Appendix Part to access my Git hub repository.</p>
 
@@ -355,17 +496,18 @@ with open('/dev/mem', 'r+b', buffering=0) as f:
         <li style="text-align:justify; text-justify:inter-ideograph"><b>Connection: </b>This class abstracts port-PIO connecitons, recording which port is connected to which PIO and identifying the start bit of the connection.</li>
         <li style="text-align:justify; text-justify:inter-ideograph"><b>Quartus: </b>This class records the paths of Quartus' executable file.</li>
         <li style="text-align:justify; text-justify:inter-ideograph"><b>FolderStructureBuilder: </b>This class will construct the folder for the quartus project. It will create quartus project and ip folder and write hdl and hw.tcl files into it.</li>
-        <li style="text-align:justify; text-justify:inter-ideograph"><b>QuartusTCLScriptGenerator: </b>...</li>
-        <li style="text-align:justify; text-justify:inter-ideograph"><b>QsysTCLScriptGenerator: </b>...</li>
-        <li style="text-align:justify; text-justify:inter-ideograph"><b>TopLevelHdlGenerator: </b>...</li>
-        <li style="text-align:justify; text-justify:inter-ideograph"><b>BatchFileGenerator: </b>...</li>
-        <li style="text-align:justify; text-justify:inter-ideograph"><b>XMLDocumentation: </b>...</li>
-        <li style="text-align:justify; text-justify:inter-ideograph"><b>QuartusProjectManager: </b>...</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>QuartusTCLScriptGenerator: </b>This class generates TCL for Quartus projects based on the connection information between Ports and PIOs.</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>QsysTCLScriptGenerator: </b>This class generates TCL for Platform Designer based on the connection information between Ports and PIOs.</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>TopLevelHdlGenerator: </b>This class generates Verilog file as a top module based on the connection information between Ports and PIOs.</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>BatchFileGenerator: </b>This class generates a batch script for Windows. The script enables Quartus to execute TCL scripts, automatically generating and compiling Quartus projects.</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>XMLDocumentation: </b>This class saves the XML connection information into an XML file, which is then transferred to the DE10 Nano. The program on the DE10 Nano parses this XML file to facilitate automated testing based on the testbench.</li>
+        <li style="text-align:justify; text-justify:inter-ideograph"><b>QuartusProjectManager: </b>This class acts as the manager for the entire program, sequentially invoking functions to parse the HDLGen_ChatGPT project, generate connection functions, and create Quartus projects. Before executing connections, the class sorts Ports to reduce the number of PIOs generated.</li>
     </ul>
 </ul>
 
 
-Details of classes:
+
+**Details of classes:**
 
 <center>Classes in HDLGenDataType.py</center>
 
@@ -614,6 +756,8 @@ https://www.intel.com/content/www/us/en/docs/programmable/683126/21-2/hard-proce
 https://man7.org/linux/man-pages/man4/mem.4.html
 
 [Building embedded Linux for the Terasic DE10-Nano (and other Cyclone V SoC FPGAs) | bitlog.it](https://bitlog.it/20170820_building_embedded_linux_for_the_terasic_de10-nano.html)
+
+https://www.intel.com/content/www/us/en/docs/programmable/683525/21-3/installing-windows-subsystem-for-linux.html
 
 ## Appendix
 
