@@ -745,8 +745,6 @@ with open('/dev/mem', 'r+b', buffering=0) as f:
         <td style="text-align:justify; text-justify:inter-ideograph">Get/set method for the path. First, it will convert it to an absolute path. Then it will convert as a string in posix path format.</td>
     </tr>
 </table>
-## Chapter 4, Future Work
-
 ## Reference
 
 https://github.com/zangman/de10-nano
